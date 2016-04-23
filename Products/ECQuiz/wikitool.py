@@ -24,6 +24,7 @@ from StringIO import StringIO
 from l2 import *                # Wolfram Fenske's Lisp2Python parser
 from time import time
 from random import random
+import zipfile
 
 ### UPDATE STUFF ####################################
 
@@ -304,8 +305,29 @@ def importQuiz(quiz, file):
 
         Parameters:
                 file            - An open file"""
+	
         buffer = file.read()
         return updateQuiz(quiz,buffer)
+
+### IMPORT QUIZ FROM A ZIP FILE ###
+def importQuizFromZip(quiz, file):
+	zf = zipfile.ZipFile(file)
+	p = re.compile('.+(manifest).+\.(xml)')
+	for filename in zf.namelist():
+		try:
+			if p.match(filename):
+				pass
+			data = zf.read(filename)
+		except KeyError:
+			print "Error: Did not find %s in zip file " % filename
+			return false
+		else:
+			print filename
+			if updateQuiz(quiz,buffer):
+				"file %s has been impored in the quiz " % filename
+			else:
+				"file %s has not been imported in the quiz " % filename
+	return true 
 
 def exportQuiz(quiz, filename):
         """Exports the given ECQuiz to a StringIO object and returns it.

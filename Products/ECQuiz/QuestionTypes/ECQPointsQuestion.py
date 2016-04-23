@@ -38,8 +38,8 @@ from Products.ECQuiz.QuestionTypes.ECQBaseQuestion import ECQBaseQuestion
 from Products.ECQuiz.AnswerTypes.ECQCorrectAnswer import ECQCorrectAnswer
 
 class ECQPointsQuestion(ECQBaseQuestion):
-    """ A question that can in some way be graded. The candidate's points 
-        or the rating he/she gave, can be retieved via the 
+    """ A question that can in some way be graded. The candidate's points
+        or the rating he/she gave, can be retieved via the
         'getCandidatePoints()' method.
     """
 
@@ -48,7 +48,7 @@ class ECQPointsQuestion(ECQBaseQuestion):
                 accessor='getPointsPrivate',
                 required=True,
                 validators=('isPositiveInt', 'clearPointsCache',),
-                read_permission=PERMISSION_INTERROGATOR,
+                default=1,
                 widget=IntegerWidget(
                     label='Points',
                     label_msgid='points_label',
@@ -74,7 +74,7 @@ class ECQPointsQuestion(ECQBaseQuestion):
             ),
         ),
     )
-    
+
     security = ClassSecurityInfo()
 
     security.declareProtected(PERMISSION_STUDENT, 'getPoints')
@@ -101,7 +101,7 @@ class ECQPointsQuestion(ECQBaseQuestion):
             return evalFunString(customScript, CUSTOM_EVALUATION_FUNCTION_NAME,
                                  [self, result, answer])
 
-    
+
     def getCandidatePoints(self, result):
         if self.isTutorGraded():
             return result.getTutorPoints(self)

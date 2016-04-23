@@ -47,7 +47,7 @@
        <!-- List the answers -->
        <table class="answers">
         <tal:loop repeat="answer answers">
-         <tr>
+         <tr tal:attributes="class repeat/answer/letter;">
           <tal:block define="
            checked     python:haveCandidateAnswer and (answer.getId() in candidateAnswer);
            correct     answer/isCorrect;
@@ -71,7 +71,7 @@
              </td>
             </tal:condition>
            </metal:block>
-           <td valign="baseline"><span tal:replace="repeat/answer/letter"/>)</td>
+           <td class="letter" valign="baseline">(<span tal:replace="repeat/answer/letter"/>)</td>
            <td valign="baseline">
             <metal:use use-macro="question/ecq_selectionquestion_view/macros/show_input_element"/>
            </td>
@@ -83,7 +83,7 @@
          </tr>
          <!-- Show another input field that allows the candidate to not select
          anything for a multiple choice question. -->
-         <tr tal:condition="python: repeat['answer'].end and not question.isAllowMultipleSelection()"
+         <tr tal:attributes="class string:hide_dont_know" tal:condition="python: repeat['answer'].end and not question.isAllowMultipleSelection()"
           tal:define="
           checked python:not haveCandidateAnswer;
           correct python:False;
@@ -103,6 +103,7 @@
             tal:define="default string: I don't know. (The question will be evaluated as if you had given no answer.)"
             tal:content="python: here.translate(domain=here.i18n_domain,
             msgid='i_dont_know',
+            target_language=ecq_tool.getContentLang(here),
             default=default)"/>
            <tal:condition condition="resultsView">
             [<span i18n:translate="false" tal:omit-tag="">false</span>]

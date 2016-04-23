@@ -60,7 +60,7 @@
      
      <!-- Select File for Upload -->
      <div class="field">
-      <label for="file" i18n:translate="import_file_label">QTI File</label>
+      <label for="file" i18n:translate="import_file_label">QTI File or Zip, as well as Formated CSV File</label>
       <div class="formHelp" i18n:translate="import_test_tool_tip">The 
        name of the assessment item or package you want to import.</div>
       <div class="formHelp"/>

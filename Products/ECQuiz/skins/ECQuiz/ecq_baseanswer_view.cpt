@@ -37,8 +37,8 @@
         <tal:if_manager condition="python:here.userIsManager(member)">
          <span class="editControls" style="white-space:nowrap;"
           tal:define="item_id answer/getId;
-            arrowUp portal/arrowUp.gif;
-            arrowDown portal/arrowDown.gif;">
+            arrowUp portal/arrowUp.png;
+            arrowDown portal/arrowDown.png;">
           <a href="/edit" tal:attributes="href string:${answer/absolute_url}/edit;"
            i18n:domain="plone" i18n:translate="Edit">Edit</a>
           

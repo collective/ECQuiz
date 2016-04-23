@@ -61,6 +61,10 @@ from Products.ECQuiz import log
 #from Products.ECQuiz.wikitool import importQuiz,exportQuiz,convertQuiz,updateQuiz
 from Products.ECQuiz import wikitool
 
+
+from Products.ECQuiz.ECQConverterTool import CSVConverter
+
+
 class DataGridWidgetI18N(DataGridWidget):
     def getColumnLabels(self, field, whatever=None):
         """ Get user friendly names of all columns """
@@ -93,10 +97,14 @@ class ColumnI18N(Column):
 
     def getLabel(self, context, widget):
         """ User friendly name for the column """
-        return widget.translate(
+        if hasattr(widget, 'translate'):  # runtime
+            return widget.translate(
                     msgid   = self.label_msgid,
                     domain  = widget.i18n_domain,
                     default = self.label)
+        # XXX Fixme this fix dodges the AttributeError: translate problem
+        else:  # tests
+            return self.label #"what should be here"
 
 class EvaluationScriptsWidget(TypesWidget):
     """ A custom widget for handling the 'evaluationScripts' 
@@ -160,7 +168,7 @@ class ECQuiz(ECQAbstractGroup):
             ),
             BooleanField('onePerPage',
                          required=False,
-                         default=False,
+                         default=True,
                          accessor='isOnePerPage',
                          widget=BooleanWidget(
                              label='One Question per Page',
@@ -174,7 +182,7 @@ class ECQuiz(ECQAbstractGroup):
             ),
             BooleanField('onePerPageNav',
                          required=False,
-                         default=False,
+                         default=True,
                          accessor='isOnePerPageNav',
                          widget=BooleanWidget(
                              label='Allow Navigation',
@@ -1055,13 +1063,38 @@ class ECQuiz(ECQAbstractGroup):
         #errorString = ''
         errors = tools.MyStringIO()
 
-        # try zipfile first
+	# custom code --> maybe CSV
+	# reset the file read ptr first
+
+	qpackage = None
+	try:
+                title = self.unicodeDecode(self.Title())
+		xmlcsv = CSVConverter(
+                      file.read(),
+                      title
+                      )
+            
+		qpackage = xmlcsv.generateZippedQuestions()
+	except:
+		try:
+			xmlcsv = CSVConverter(file.filename.read())
+			qpackage = xmlcsv.generateZippedQuestions()
+		except:
+			pass	
+	       
+	# try zipfile first
         zipFileInstance = None
         try:
-            zipFileInstance = ZipFile(file.filename)
+		if qpackage != None:
+			zipFileInstance = qpackage
+		else:
+			zipFileInstance = ZipFile(file.filename)
         except:
             try:
-                zipFileInstance = ZipFile(file)
+		if qpackage != None:
+			zipFileInstance = qpackage
+		else:
+	                zipFileInstance = ZipFile(file)
             except:
                 pass
         if(zipFileInstance):

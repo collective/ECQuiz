@@ -34,10 +34,10 @@
     <tal:block condition="isPublic" define="headingText here/title_or_id;">
      <metal:use use-macro="here/ecq_tools/macros/heading"/>
     </tal:block>
-
+<!--
     <metal:use use-macro="here/ecq_tools/macros/up_one_level">
      Up one level
-    </metal:use>
+    </metal:use>-->
     
     <tal:define_heading_level define="headingLevel python:headingLevel+1;">
 
@@ -61,7 +61,7 @@
          
          <!-- List the questions -->
          <!-- Everything on one page mode -->
-         <tal:if_all_on_one_page condition="showAll">
+         <tal:if_all_on_one_page condition="showAll"><button class="default"><a href="ttw.getQuestions">export results in CXC format</a></button>
           <tal:repeat repeat="questionContainer python:[here] + questionGroups">
            <metal:use use-macro="
             questionContainer/ecq_group_view/macros/view"
@@ -155,7 +155,7 @@
                class="context"
                type="submit"
                name="submit"
-               value="Submit Quiz"
+               value="Submit Exam"
                i18n:attributes="value"
                onclick="#"
                tal:define="alert_msg python:here.translate(msgid='alert_really_submit',
@@ -198,7 +198,7 @@
       <div tal:content="hasJustSubmitted" />
       -->
       <p tal:condition="python: (not isPublic)" i18n:translate="not_published">
-       This quiz has not been published.
+       This exam has not been published.
       </p>
       
       <p tal:condition="python: isPublic and (not mayResubmit) and (not hasJustSubmitted)">

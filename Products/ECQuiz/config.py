@@ -43,7 +43,7 @@ GLOBALS = globals()
 DEPENDENCIES = ['DataGridField']
 
 # GS profile name
-#EXTENSION_PROFILES = ('Products.ECQuiz:default',)
+EXTENSION_PROFILES = ('Products.ECQuiz:default',)
 
 # The name of the Product
 PROJECTNAME = 'ECQuiz'
