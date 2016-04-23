@@ -61,7 +61,7 @@
          
          <!-- List the questions -->
          <!-- Everything on one page mode -->
-         <tal:if_all_on_one_page condition="showAll"><button class="default"><a href="ttw.getQuestions">export results in CXC format</a></button>
+         <tal:if_all_on_one_page condition="showAll">
           <tal:repeat repeat="questionContainer python:[here] + questionGroups">
            <metal:use use-macro="
             questionContainer/ecq_group_view/macros/view"

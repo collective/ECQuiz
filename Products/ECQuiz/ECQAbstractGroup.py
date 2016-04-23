@@ -112,7 +112,7 @@ class ECQAbstractGroup(ECQFolder):
                 #
                 # which is how you normally access the contents of a
                 # field.
-                default_output_type='text/html',
+                default_output_type='text/plain',
                 widget=TextAreaWidget(
                     # Default label of this property.  This is the
                     # name used for this property in e.g. the
