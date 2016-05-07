@@ -489,9 +489,18 @@ class ECQResult(ATCTContent, HistoryAwareMixin):
     def tryWorkflowAction(self, action, ignoreErrors=False, comment=None):
         wtool = self.portal_workflow
         wf = wtool.getWorkflowsFor(self)[0]
+        user = getSecurityManager().getUser()
+        userId = user.getId()
+        if not userId:
+            # skip action if system user
+            return
         if wf.isActionSupported(self, action):
             if comment is None:
-                userId = getSecurityManager().getUser().getId()
+                userId = user.getId()
+                # we use user.name when called by a system script
+                # which does not return a id
+                if not userId:
+                   userId = user.name
                 comment = 'State changed by ' + userId
             wtool.doActionFor(self, action, comment=comment)
         elif not ignoreErrors:
